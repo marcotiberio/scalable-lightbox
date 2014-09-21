@@ -1,7 +1,7 @@
 Scalable Lightbox
 =================
 
-**A jQuery plugin for building esthetically minimalistic, responsive picture lightboxes. Features an index module for providing an overview with thumbnails as well as a lightbox module, for displaying high-res images in a responsive manner.**
+**A jQuery plugin for building aesthetically minimalistic, responsive picture lightboxes. Features an index module for providing an overview with thumbnails as well as a lightbox module, for displaying high-res images in a responsive manner.**
 
 Please go to the [plugin page](http://scalable-lightbox.com/) for a complete documentation of the plugin.
 
