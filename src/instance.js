@@ -7,7 +7,7 @@
     // for better performance. After initial configuration via
     // the `options` attribute, the plugin may display one or
     // multiple `decks` in the *index and or lightbox module*.
-    var instance = $.data(this, "ScalableLightbox"),
+    var instance = $.data(document.body, "ScalableLightbox"),
         args;
 
     if (!instance) {

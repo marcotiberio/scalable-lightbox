@@ -11,11 +11,11 @@
     },
     {
       "type": "Commercial",
-      "url":  "http://scalable-lightbox.com/license/"
+      "url":  "https://scalable-lightbox.com/license/"
     }
   ],
   "author": "Olivier Hug, Bänziger Hug Ltd. <oh@baenziger-hug.com>",
-  "homepage": "http://scalable-lightbox.com/",
+  "homepage": "https://scalable-lightbox.com/",
   "keywords": [
     "lightbox",
     "scalable",

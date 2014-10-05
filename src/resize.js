@@ -4,11 +4,11 @@
 
         // Resize Method
         // -------------
-        // **Public method** that is used to resize the plugin plugin.
+        // **Public method** that is used to resize the plugin.
         // Whether the *index or lightbox module* is resized, depends on
         // what is currently active (have a look at the `indexState` and
         // `lightboxState` properties).
-        resize: function() {
+        resize: function(cb) {
 
           var self        = this,
               winWidth    = $(window).width(),
@@ -23,11 +23,20 @@
                   this.options.lightbox.padding.vertical),
               currentImg, imgWidth, imgHeight;
 
+          cb = typeof cb === "function" ? cb : false;
 
           // Resize the *index module*, if this module is currently active.
           if (this.indexState === "opened") {
 
             this._resizeIndex("current");
+
+            // inline or general resize callback
+            if (cb) {
+              cb();
+            } else if (typeof self.options.callbacks.resize === "function") {
+              self.options.callbacks.resize();
+            }
+
             this._debug("info", "Index module has been resized.");
 
           // Resize *lightbox module*, if it is currently active.
@@ -90,6 +99,13 @@
                 });
                 this.$lightboxCaptionContainer.show();
 
+                // inline or general resize callback
+                if (cb) {
+                  cb();
+                } else if (typeof self.options.callbacks.resize === "function") {
+                  self.options.callbacks.resize();
+                }
+
               } else {
 
                 this.$lightboxDecksContainer.stop(true, false).animate({
@@ -99,6 +115,14 @@
                   marginTop:    -imgHeight/2
                 }, this.options.transitions.fadeLightboxItem, function() {
                   self.$lightboxCaptionContainer.show();
+
+                  // inline or general resize callback
+                  if (cb) {
+                    cb();
+                  } else if (typeof self.options.callbacks.resize === "function") {
+                    self.options.callbacks.resize();
+                  }
+
                 });
 
               }

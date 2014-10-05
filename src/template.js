@@ -53,7 +53,7 @@
                                "id=\"" +classNames.indexDeck + "-" + deck.id + "\"></div>"),
               i = 0, total = deck.items.length;
 
-          for(i; i < total; i++) {
+          for (i; i < total; i++) {
             $div.append(this._tmplIndexItem(deck.items[i], i, total));
           }
 
@@ -194,7 +194,7 @@
                        "id=\"" +classNames.lightboxDeck + "-" + deck.id + "\"></div>"),
               i = 0, total = deck.items.length;
 
-          for(i; i < total; i++) {
+          for (i; i < total; i++) {
             $div.append(
               "<div class=\"" + classNames.lightboxItem + "\">" +
                 "<div class=\"" + classNames.lightboxItemIndicator + "\"></div>" +

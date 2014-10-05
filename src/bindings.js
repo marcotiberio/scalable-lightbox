@@ -12,6 +12,7 @@
 
           this._bindKeys(unbind);
           this._bindResize(unbind);
+          this._bindCaptionLinks(unbind);
 
         },
 
@@ -363,11 +364,7 @@
 
               this.$lightboxWrapper
                 .hammer()
-                .off("tap.scalableLightbox.leftCursor");
-
-              this.$lightboxWrapper
-                .hammer()
-                .off("tap.scalableLightbox.rightCursor");
+                .off("tap.scalableLightbox.leftCursor tap.scalableLightbox.rightCursor");
 
               this.$lightboxWrapper
                 .hammer()
@@ -569,10 +566,11 @@
 
               },
               funcAlt    = function() {
+
                 if (unbind) {
 
                   self.$lightboxWrapper
-                    .off("click.scalableLightbox.indexLink");
+                    .off("click.scalableLightbox.indexItem");
 
                 } else {
 
@@ -667,10 +665,12 @@
                 }
 
               },
-              funcAlt = function() {
+
+              funcAlt    = function() {
+
                 if (unbind) {
 
-                  self.$indexWrapper.off("click.thumb");
+                  self.$indexWrapper.off("click.scalableLightbox.thumbLinks");
 
                 } else {
 
@@ -726,3 +726,135 @@
           }
 
         },
+
+
+        // Bind Caption Links Method
+        // -------------------------
+        // **Private method**, for binding links in caption which come from the content
+        // and should not bubble up to the parent element (closing the *index* or *lightbox module*).
+        _bindCaptionLinks: function(unbind) {
+
+          var self       = this,
+              classNames = this.options.classNames,
+              func       = function() {
+
+                if (unbind) {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .hammer()
+                      .off("tap.scalableLightbox.indexCaptionLinks");
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .hammer()
+                      .off("tap.scalableLightbox.lightboxCaptionLinks");
+
+                  }
+
+                } else {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .hammer()
+                      .on(
+                        "tap.scalableLightbox.indexCaptionLinks",
+                        "." + classNames.indexItemCaption + " a",
+                        function(event) {
+                          event.gesture.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .hammer()
+                      .on(
+                        "tap.scalableLightbox.lightboxCaptionLinks",
+                        "a:not(." + classNames.lightboxIndexLink + ")",
+                        function(event) {
+                          event.gesture.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                }
+
+              },
+              funcAlt    = function() {
+
+                if (unbind) {
+
+                  if (self.options.index.enabled) {
+                    self.$indexDecksContainer
+                      .off("click.scalableLightbox.indexCaptionLinks");
+                  }
+
+                  if (self.options.lightbox.enabled) {
+                    self.$lightboxCaptionContainer
+                      .off("click.scalableLightbox.lightboxCaptionLinks");
+                  }
+
+                } else {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .on(
+                        "click.scalableLightbox.indexCaptionLinks",
+                        "." + classNames.indexItemCaption + " a",
+                        function(event) {
+                          event.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .on(
+                        "click.scalableLightbox.lightboxCaptionLinks",
+                        "a:not(." + classNames.lightboxIndexLink + ")",
+                        function(event) {
+                          event.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                }
+
+              };
+
+          if (typeof window.define === "function" && window.define.amd &&
+              typeof Modernizr !== "undefined" &&
+              Modernizr.touch) {
+
+            require(["hammer"], function() {
+              func();
+            }, function() {
+              funcAlt();
+            });
+
+          } else if ($.fn.hammer &&
+                     typeof Modernizr !== "undefined" &&
+                     Modernizr.touch) {
+
+            func();
+
+          } else {
+
+            funcAlt();
+
+          }
+        },
+

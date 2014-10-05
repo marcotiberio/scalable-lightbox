@@ -3,13 +3,13 @@ Scalable Lightbox
 
 **A jQuery plugin for building aesthetically minimalistic, responsive picture lightboxes. Features an index module for providing an overview with thumbnails as well as a lightbox module, for displaying high-res images in a responsive manner.**
 
-Please go to the [plugin page](http://scalable-lightbox.com/) for a complete documentation of the plugin.
+Please go to the [plugin page](https://scalable-lightbox.com/) for a complete documentation of the plugin.
 
 
 
 ## Install
 
-ScalableLightbox is a jQuery plugin, which means you have to integrate the [jQuery library](http://jquery.com/download/) (v1.09+ or even v2.00+) on your website. Then include one of the following versions of the plugin depending on your purpose:
+ScalableLightbox is a jQuery plugin, which means you have to integrate the [jQuery library](http://jquery.com/download/) (v1.7.1+ or even v2.0.0+) on your website. Then include one of the following versions of the plugin depending on your purpose:
 
 * jquery.scalable&#45;lightbox.js &mdash; for development
 * jquery.scalable&#45;lightbox.min.js &mdash; for production
@@ -37,7 +37,7 @@ bower install scalable-lightbox
 
 ScalableLightbox may be used in commercial projects with the one-time purchase of a commercial license.
 
-[http://scalable-lightbox.com/license/](http://scalable-lightbox.com/license/)
+[https://scalable-lightbox.com/license/](https://scalable-lightbox.com/license/)
 
 For personal, non&#45;commercial, or open source projects and applications, you may use this software under the terms of the [GPL v3 License](http://choosealicense.com/licenses/gpl-v3/). In short, this means you may use ScalableLightbox for free.
 

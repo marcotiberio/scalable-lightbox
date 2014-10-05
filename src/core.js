@@ -702,6 +702,10 @@
           // Remove all divs that where constructed.
           this.$container.remove();
 
+          // remove body tag (in case it is still present)
+          $("body").removeClass(this.options.classNames.pluginActive);
+
+
           if (cb) {
             cb();
           }

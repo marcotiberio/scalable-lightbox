@@ -1,8 +1,8 @@
-//     ScalableLightbox - v1.0.0 - 2014-09-21
+//     ScalableLightbox - v1.0.0 - 2014-10-05
 
 //     (c) 2014 Olivier Hug, Bänziger Hug Ltd. <oh@baenziger-hug.com>
 //     Licensed under the GPL v3, Commercial license
-//     http://scalable-lightbox.com/
+//     https://scalable-lightbox.com/
 
 
 ;(function(factory) {
@@ -71,7 +71,7 @@
     // for better performance. After initial configuration via
     // the `options` attribute, the plugin may display one or
     // multiple `decks` in the *index and or lightbox module*.
-    var instance = $.data(this, "ScalableLightbox"),
+    var instance = $.data(document.body, "ScalableLightbox"),
         args;
 
     if (!instance) {
@@ -211,7 +211,7 @@
             // Whether the *index module* is activated.
             enabled:                        true,
 
-            // If the index is displayed on top of an overlay div.
+            // If the *index module* is displayed on top of an overlay div.
             overlay:                        true,
 
             // The layout of the thumbs, valid values are `"float"` and `"masonry"`.
@@ -223,7 +223,7 @@
               overlay:                      true,
 
               // The width of a thumbnail (the height is calculated automatically
-              // out of the `width` and `height` of the corresponding data item).
+              // out of the `width` and `height` of the corresponding deck item).
               width:                        280,
 
               // What should be displayed as a caption of the thumb. Valid attributes are:
@@ -235,17 +235,17 @@
               caption:                      "number",
 
               // In case `caption` is set to `"number"`, how the number should be
-              // displayed. Use `%n` to display the thumbs position and `%total%`
+              // displayed. Use `%n%` to display the thumbs position and `%total%`
               // to show the total items in the current deck. For example, `"%n% of %total%"`,
               // will display: *1 of 10*, *2 of 10*, etc.
               captionNumberFmt:             "%n% / %total%",
 
               // The position of the caption. Valid attributes are:
-              // * `"above"` above the thumb (use `captionVerticalMargin` for spacing)
+              // * `"above"` above the thumb (use `captionVerticalMargin` for vertical spacing)
               // * `"top"` at the top border of the thumb
               // * `"center"` at the center of the thumb
               // * `"bottom"` at the bottom of the thumb
-              // * `"below"` below the thumb (use `captionVerticalMargin` for spacing)
+              // * `"below"` below the thumb (use `captionVerticalMargin` for vertical spacing)
               captionPosition:              "below",
 
               // The margin to the thumbnail, in case a caption is positioned
@@ -268,10 +268,10 @@
             // Whether the *lightbox module* is activated.
             enabled:                        true,
 
-            // If the lightbox is displayed on top of an overlay div.
+            // If the *lightbox module* is displayed on top of an overlay div.
             overlay:                        true,
 
-            // The padding for the lightbox images to the window. The values
+            // The padding for the lightbox images to the browser window. The values
             // are divided by 2, to have an equal padding on each side.
             padding: {
               horizontal:                   100,
@@ -328,12 +328,13 @@
           // Callbacks
           // ---------
           // *General callbacks*. These functions are executed every time when a call to
-          // a corresponding public function is finished. In order to use specific callbacks,
+          // a corresponding public function is finished. In order to use nonrecurring callbacks,
           // you may send them along with the call the corresponding public function.
           callbacks: {
             loaded:                         null,
             open:                           null,
-            close:                          null
+            close:                          null,
+            resize:                         null
           },
 
 
@@ -384,7 +385,7 @@
             fadeInIndex:                    500,
             fadeOutIndex:                   500,
 
-            // Duration to fade in a index item when the img or thumb has been loaded.
+            // Duration to fade in a index item once the img or thumb has been loaded.
             fadeInIndexItemLoaded:          250,
 
             // Duration to fade the lightbox overlay in or out (if activated, see `overlay`
@@ -397,7 +398,7 @@
             fadeInLightbox:                 500,
             fadeOutLightbox:                500,
 
-            // Duration to fade in a lightbox item when the img has been loaded.
+            // Duration to fade in a lightbox item once the img has been loaded.
             fadeInLightboxItemLoaded:       250,
 
             // Duration for the transition from prev image to the next in the lightbox
@@ -1110,6 +1111,10 @@
           // Remove all divs that where constructed.
           this.$container.remove();
 
+          // remove body tag (in case it is still present)
+          $("body").removeClass(this.options.classNames.pluginActive);
+
+
           if (cb) {
             cb();
           }
@@ -1180,6 +1185,14 @@
             return false;
           }
 
+          // if the lightbox is not active, no navigation method can be used
+          if (this.lightboxState !== "opened") {
+            this._debug("info", "The lightbox module has to be active (displayed) " +
+              "when using a navigation method!");
+
+            return false;
+          }
+
           // Prevent navigation left/right if there is only one item.
           if (typeof direction === "string" &&
               this.currentDeck.items.length === 1) {
@@ -1198,10 +1211,11 @@
                     ".fadein")
               .index();
 
-            if (next >= this.currentDeck.items.length) {
-              next = 0;
-            } else if (next <= 0) {
-              next = 0;
+            // if number is below zero or larger then total items
+            // go to the last item in the current deck
+            if (next >= this.currentDeck.items.length ||
+                next < 0) {
+              next = this.currentDeck.items.length - 1;
             }
 
             if (prev === next) {
@@ -1430,11 +1444,11 @@
 
         // Resize Method
         // -------------
-        // **Public method** that is used to resize the plugin plugin.
+        // **Public method** that is used to resize the plugin.
         // Whether the *index or lightbox module* is resized, depends on
         // what is currently active (have a look at the `indexState` and
         // `lightboxState` properties).
-        resize: function() {
+        resize: function(cb) {
 
           var self        = this,
               winWidth    = $(window).width(),
@@ -1449,11 +1463,20 @@
                   this.options.lightbox.padding.vertical),
               currentImg, imgWidth, imgHeight;
 
+          cb = typeof cb === "function" ? cb : false;
 
           // Resize the *index module*, if this module is currently active.
           if (this.indexState === "opened") {
 
             this._resizeIndex("current");
+
+            // inline or general resize callback
+            if (cb) {
+              cb();
+            } else if (typeof self.options.callbacks.resize === "function") {
+              self.options.callbacks.resize();
+            }
+
             this._debug("info", "Index module has been resized.");
 
           // Resize *lightbox module*, if it is currently active.
@@ -1516,6 +1539,13 @@
                 });
                 this.$lightboxCaptionContainer.show();
 
+                // inline or general resize callback
+                if (cb) {
+                  cb();
+                } else if (typeof self.options.callbacks.resize === "function") {
+                  self.options.callbacks.resize();
+                }
+
               } else {
 
                 this.$lightboxDecksContainer.stop(true, false).animate({
@@ -1525,6 +1555,14 @@
                   marginTop:    -imgHeight/2
                 }, this.options.transitions.fadeLightboxItem, function() {
                   self.$lightboxCaptionContainer.show();
+
+                  // inline or general resize callback
+                  if (cb) {
+                    cb();
+                  } else if (typeof self.options.callbacks.resize === "function") {
+                    self.options.callbacks.resize();
+                  }
+
                 });
 
               }
@@ -1740,6 +1778,7 @@
 
           this._bindKeys(unbind);
           this._bindResize(unbind);
+          this._bindCaptionLinks(unbind);
 
         },
 
@@ -2091,11 +2130,7 @@
 
               this.$lightboxWrapper
                 .hammer()
-                .off("tap.scalableLightbox.leftCursor");
-
-              this.$lightboxWrapper
-                .hammer()
-                .off("tap.scalableLightbox.rightCursor");
+                .off("tap.scalableLightbox.leftCursor tap.scalableLightbox.rightCursor");
 
               this.$lightboxWrapper
                 .hammer()
@@ -2297,10 +2332,11 @@
 
               },
               funcAlt    = function() {
+
                 if (unbind) {
 
                   self.$lightboxWrapper
-                    .off("click.scalableLightbox.indexLink");
+                    .off("click.scalableLightbox.indexItem");
 
                 } else {
 
@@ -2395,10 +2431,12 @@
                 }
 
               },
-              funcAlt = function() {
+
+              funcAlt    = function() {
+
                 if (unbind) {
 
-                  self.$indexWrapper.off("click.thumb");
+                  self.$indexWrapper.off("click.scalableLightbox.thumbLinks");
 
                 } else {
 
@@ -2456,6 +2494,138 @@
         },
 
 
+        // Bind Caption Links Method
+        // -------------------------
+        // **Private method**, for binding links in caption which come from the content
+        // and should not bubble up to the parent element (closing the *index* or *lightbox module*).
+        _bindCaptionLinks: function(unbind) {
+
+          var self       = this,
+              classNames = this.options.classNames,
+              func       = function() {
+
+                if (unbind) {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .hammer()
+                      .off("tap.scalableLightbox.indexCaptionLinks");
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .hammer()
+                      .off("tap.scalableLightbox.lightboxCaptionLinks");
+
+                  }
+
+                } else {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .hammer()
+                      .on(
+                        "tap.scalableLightbox.indexCaptionLinks",
+                        "." + classNames.indexItemCaption + " a",
+                        function(event) {
+                          event.gesture.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .hammer()
+                      .on(
+                        "tap.scalableLightbox.lightboxCaptionLinks",
+                        "a:not(." + classNames.lightboxIndexLink + ")",
+                        function(event) {
+                          event.gesture.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                }
+
+              },
+              funcAlt    = function() {
+
+                if (unbind) {
+
+                  if (self.options.index.enabled) {
+                    self.$indexDecksContainer
+                      .off("click.scalableLightbox.indexCaptionLinks");
+                  }
+
+                  if (self.options.lightbox.enabled) {
+                    self.$lightboxCaptionContainer
+                      .off("click.scalableLightbox.lightboxCaptionLinks");
+                  }
+
+                } else {
+
+                  if (self.options.index.enabled) {
+
+                    self.$indexDecksContainer
+                      .on(
+                        "click.scalableLightbox.indexCaptionLinks",
+                        "." + classNames.indexItemCaption + " a",
+                        function(event) {
+                          event.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.$lightboxCaptionContainer
+                      .on(
+                        "click.scalableLightbox.lightboxCaptionLinks",
+                        "a:not(." + classNames.lightboxIndexLink + ")",
+                        function(event) {
+                          event.stopPropagation();
+                        }
+                      );
+
+                  }
+
+                }
+
+              };
+
+          if (typeof window.define === "function" && window.define.amd &&
+              typeof Modernizr !== "undefined" &&
+              Modernizr.touch) {
+
+            require(["hammer"], function() {
+              func();
+            }, function() {
+              funcAlt();
+            });
+
+          } else if ($.fn.hammer &&
+                     typeof Modernizr !== "undefined" &&
+                     Modernizr.touch) {
+
+            func();
+
+          } else {
+
+            funcAlt();
+
+          }
+        },
+
+
+
         // Template Methods
         // ================
 
@@ -2510,7 +2680,7 @@
                                "id=\"" +classNames.indexDeck + "-" + deck.id + "\"></div>"),
               i = 0, total = deck.items.length;
 
-          for(i; i < total; i++) {
+          for (i; i < total; i++) {
             $div.append(this._tmplIndexItem(deck.items[i], i, total));
           }
 
@@ -2651,7 +2821,7 @@
                        "id=\"" +classNames.lightboxDeck + "-" + deck.id + "\"></div>"),
               i = 0, total = deck.items.length;
 
-          for(i; i < total; i++) {
+          for (i; i < total; i++) {
             $div.append(
               "<div class=\"" + classNames.lightboxItem + "\">" +
                 "<div class=\"" + classNames.lightboxItemIndicator + "\"></div>" +
@@ -2702,6 +2872,7 @@
               func = function() {
                 self.$indexDecksContainer
                   .find("." + classNames.indexDeck)
+                  .addClass("masonry")
                   .masonry({
                     itemSelector:   "." + classNames.indexItem,
                     isFitWidth:     true,
@@ -2735,7 +2906,7 @@
         }
       };
 
-      $.data(this, "ScalableLightbox", instance);
+      $.data(document.body, "ScalableLightbox", instance);
     }
 
 
