@@ -19,11 +19,11 @@
     "url": "git://github.com/onyx1/jquery-scalable-lightbox.git"
   },
   "dependencies": {
-    "jquery": "1"
+    "jquery": "~1.7.1"
   },
   "devDependencies": {
     "qunit": "~1.14.0",
-    "jquery": "1",
+    "jquery": "~1.7.1",
     "jquery-modern": "jquery#2"
   },
   "ignore": [

@@ -55,6 +55,14 @@
             return false;
           }
 
+          // if the lightbox is not active, no navigation method can be used
+          if (this.lightboxState !== "opened") {
+            this._debug("info", "The lightbox module has to be active (displayed) " +
+              "when using a navigation method!");
+
+            return false;
+          }
+
           // Prevent navigation left/right if there is only one item.
           if (typeof direction === "string" &&
               this.currentDeck.items.length === 1) {
@@ -73,10 +81,11 @@
                     ".fadein")
               .index();
 
-            if (next >= this.currentDeck.items.length) {
-              next = 0;
-            } else if (next <= 0) {
-              next = 0;
+            // if number is below zero or larger then total items
+            // go to the last item in the current deck
+            if (next >= this.currentDeck.items.length ||
+                next < 0) {
+              next = this.currentDeck.items.length - 1;
             }
 
             if (prev === next) {

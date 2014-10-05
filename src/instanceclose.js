@@ -1,6 +1,6 @@
       };
 
-      $.data(this, "ScalableLightbox", instance);
+      $.data(document.body, "ScalableLightbox", instance);
     }
 
 

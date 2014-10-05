@@ -71,7 +71,7 @@
             // Whether the *index module* is activated.
             enabled:                        true,
 
-            // If the index is displayed on top of an overlay div.
+            // If the *index module* is displayed on top of an overlay div.
             overlay:                        true,
 
             // The layout of the thumbs, valid values are `"float"` and `"masonry"`.
@@ -83,7 +83,7 @@
               overlay:                      true,
 
               // The width of a thumbnail (the height is calculated automatically
-              // out of the `width` and `height` of the corresponding data item).
+              // out of the `width` and `height` of the corresponding deck item).
               width:                        280,
 
               // What should be displayed as a caption of the thumb. Valid attributes are:
@@ -95,17 +95,17 @@
               caption:                      "number",
 
               // In case `caption` is set to `"number"`, how the number should be
-              // displayed. Use `%n` to display the thumbs position and `%total%`
+              // displayed. Use `%n%` to display the thumbs position and `%total%`
               // to show the total items in the current deck. For example, `"%n% of %total%"`,
               // will display: *1 of 10*, *2 of 10*, etc.
               captionNumberFmt:             "%n% / %total%",
 
               // The position of the caption. Valid attributes are:
-              // * `"above"` above the thumb (use `captionVerticalMargin` for spacing)
+              // * `"above"` above the thumb (use `captionVerticalMargin` for vertical spacing)
               // * `"top"` at the top border of the thumb
               // * `"center"` at the center of the thumb
               // * `"bottom"` at the bottom of the thumb
-              // * `"below"` below the thumb (use `captionVerticalMargin` for spacing)
+              // * `"below"` below the thumb (use `captionVerticalMargin` for vertical spacing)
               captionPosition:              "below",
 
               // The margin to the thumbnail, in case a caption is positioned
@@ -128,10 +128,10 @@
             // Whether the *lightbox module* is activated.
             enabled:                        true,
 
-            // If the lightbox is displayed on top of an overlay div.
+            // If the *lightbox module* is displayed on top of an overlay div.
             overlay:                        true,
 
-            // The padding for the lightbox images to the window. The values
+            // The padding for the lightbox images to the browser window. The values
             // are divided by 2, to have an equal padding on each side.
             padding: {
               horizontal:                   100,
@@ -188,12 +188,13 @@
           // Callbacks
           // ---------
           // *General callbacks*. These functions are executed every time when a call to
-          // a corresponding public function is finished. In order to use specific callbacks,
+          // a corresponding public function is finished. In order to use nonrecurring callbacks,
           // you may send them along with the call the corresponding public function.
           callbacks: {
             loaded:                         null,
             open:                           null,
-            close:                          null
+            close:                          null,
+            resize:                         null
           },
 
 
@@ -244,7 +245,7 @@
             fadeInIndex:                    500,
             fadeOutIndex:                   500,
 
-            // Duration to fade in a index item when the img or thumb has been loaded.
+            // Duration to fade in a index item once the img or thumb has been loaded.
             fadeInIndexItemLoaded:          250,
 
             // Duration to fade the lightbox overlay in or out (if activated, see `overlay`
@@ -257,7 +258,7 @@
             fadeInLightbox:                 500,
             fadeOutLightbox:                500,
 
-            // Duration to fade in a lightbox item when the img has been loaded.
+            // Duration to fade in a lightbox item once the img has been loaded.
             fadeInLightboxItemLoaded:       250,
 
             // Duration for the transition from prev image to the next in the lightbox

@@ -36,6 +36,7 @@
               func = function() {
                 self.$indexDecksContainer
                   .find("." + classNames.indexDeck)
+                  .addClass("masonry")
                   .masonry({
                     itemSelector:   "." + classNames.indexItem,
                     isFitWidth:     true,
