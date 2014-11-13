@@ -95,6 +95,16 @@ module.exports = function(grunt) {
           interrupt: true
         }
       }
+    },
+
+
+    connect: {
+      server: {
+        options: {
+          port: 3000,
+          base: '.'
+        }
+      }
     }
 
   });
@@ -105,9 +115,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // define tasks
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['connect', 'watch']);
   grunt.registerTask('dev', ['concat', 'jshint']);
   grunt.registerTask('build', ['concat', 'uglify', 'cssmin']);
 
