@@ -57,6 +57,9 @@
           // URL accordingly, if the *index or lightbox module* is called.
           hash:                             true,
 
+          // Whether touch support should be activated
+          touch:                            true,
+
           // The base path for image URL's. If the variable is set, the `baseImgPath` will
           // be placed in front of all `img` and `thumb` paths of every deck. **Attention:**
           // Please provide a slash at the end of the path.

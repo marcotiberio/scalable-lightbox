@@ -88,8 +88,7 @@
 
               this._resizeLightboxCaptions(imgWidth);
 
-              if (typeof Modernizr !== "undefined" &&
-                  Modernizr.csstransitions) {
+              if (this.hasCSSTransitions) {
 
                 this.$lightboxDecksContainer.css({
                   width:         imgWidth,

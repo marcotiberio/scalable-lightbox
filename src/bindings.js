@@ -293,8 +293,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               self._bindTouch(unbind);
@@ -303,8 +302,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             this._bindTouch(unbind);
 
@@ -595,8 +593,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -605,8 +602,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 
@@ -704,8 +700,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -714,8 +709,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 
@@ -836,8 +830,7 @@
               };
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -846,8 +839,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 

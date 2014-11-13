@@ -79,7 +79,7 @@ module.exports = function(grunt) {
         devel:      true,
         jquery:     true,
         strict:     true,
-        predef:     ["Modernizr", "define", "require"]
+        predef:     ["Modernizr", "define", "require", "DocumentTouch"]
       },
       dev: {
         src: ['jquery.<%= pkg.name %>.js']

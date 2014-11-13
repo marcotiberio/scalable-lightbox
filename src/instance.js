@@ -69,6 +69,10 @@
         initPlugin:                 false,
         initMasonry:                false,
 
+        // Touch & CSS3 transitions feature detections
+        hasTouch:                   false,
+        hasCSSTransitions:          false,
+
         // The `options` object, which is provided by the initial
         // plugin call and overwrites defaults defined in the
         // `settings` object below.

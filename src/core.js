@@ -36,7 +36,59 @@
             $("body").append(this.$container);
             this._loadData(cb);
 
+            // touch feature detection
+            if (this.options.touch) {
+              this.hasTouch = this._supportsTouch();
+            } else {
+              this.hasTouch = false;
+            }
+
+            // CSS3 transition feature detection
+            this.hasCSSTransitions = this._supportsCSSTransitions();
+
           }
+
+        },
+
+
+        _supportsTouch: function() {
+
+          if (window.DocumentTouch && document instanceof DocumentTouch ||
+              ("ontouchstart" in window) ||
+              ("onmsgesturechange" in window) ||
+              navigator.msMaxTouchPoints) {
+
+            return true;
+
+          }
+
+          return false;
+
+        },
+
+
+        _supportsCSSTransitions: function() {
+
+          var body     = document.body || document.documentElement,
+              style    = body.style,
+              prefixes = ["Moz", "webkit", "Webkit", "Khtml", "O", "ms"],
+              property = "transition",
+              i        = 0;
+
+          if (typeof style[property] === "string") {
+            return true;
+          }
+
+          // test vendor properties
+          property = property.charAt(0).toUpperCase() + property.substr(1);
+
+          for (i; i < prefixes.length; i++) {
+            if (typeof style[prefixes[i] + property] === "string") {
+              return true;
+            }
+          }
+
+          return false;
 
         },
 
@@ -252,8 +304,7 @@
                 $indicator.after($img);
                 $indicator.hide();
 
-                if (typeof Modernizr !== "undefined" &&
-                    Modernizr.csstransitions) {
+                if (self.hasCSSTransitions) {
                   $img.addClass("loaded");
                 } else {
                   $img.fadeIn(transitions["fadeIn" + self._capitalize(module) + "ItemLoaded"]);
@@ -311,8 +362,7 @@
                     $indicator.after($img.attr("src", src));
                     $indicator.hide();
 
-                    if (typeof Modernizr !== "undefined" &&
-                        Modernizr.csstransitions) {
+                    if (self.hasCSSTransitions) {
                       $img.addClass("loaded");
                     } else {
                       $img.fadeIn(transitions.fadeInIndexItemLoaded);
@@ -376,8 +426,7 @@
                     $indicator.after($img.attr("src", src));
                     $indicator.hide();
 
-                    if (typeof Modernizr !== "undefined" &&
-                        Modernizr.csstransitions) {
+                    if (self.hasCSSTransitions) {
                       $img.addClass("loaded");
                     } else {
                       $img.fadeIn(transitions.fadeInLightboxItemLoaded);

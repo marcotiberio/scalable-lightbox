@@ -1,4 +1,4 @@
-//     ScalableLightbox - v1.0.0 - 2014-10-05
+//     ScalableLightbox - v1.1.0 - 2014-11-14
 
 //     (c) 2014 Olivier Hug, Bänziger Hug Ltd. <oh@baenziger-hug.com>
 //     Licensed under the GPL v3, Commercial license
@@ -133,6 +133,10 @@
         initPlugin:                 false,
         initMasonry:                false,
 
+        // Touch & CSS3 transitions feature detections
+        hasTouch:                   false,
+        hasCSSTransitions:          false,
+
         // The `options` object, which is provided by the initial
         // plugin call and overwrites defaults defined in the
         // `settings` object below.
@@ -196,6 +200,9 @@
           // Whether the plugin should react to hashes on pageload and also change the
           // URL accordingly, if the *index or lightbox module* is called.
           hash:                             true,
+
+          // Whether touch support should be activated
+          touch:                            true,
 
           // The base path for image URL's. If the variable is set, the `baseImgPath` will
           // be placed in front of all `img` and `thumb` paths of every deck. **Attention:**
@@ -445,7 +452,59 @@
             $("body").append(this.$container);
             this._loadData(cb);
 
+            // touch feature detection
+            if (this.options.touch) {
+              this.hasTouch = this._supportsTouch();
+            } else {
+              this.hasTouch = false;
+            }
+
+            // CSS3 transition feature detection
+            this.hasCSSTransitions = this._supportsCSSTransitions();
+
           }
+
+        },
+
+
+        _supportsTouch: function() {
+
+          if (window.DocumentTouch && document instanceof DocumentTouch ||
+              ("ontouchstart" in window) ||
+              ("onmsgesturechange" in window) ||
+              navigator.msMaxTouchPoints) {
+
+            return true;
+
+          }
+
+          return false;
+
+        },
+
+
+        _supportsCSSTransitions: function() {
+
+          var body     = document.body || document.documentElement,
+              style    = body.style,
+              prefixes = ["Moz", "webkit", "Webkit", "Khtml", "O", "ms"],
+              property = "transition",
+              i        = 0;
+
+          if (typeof style[property] === "string") {
+            return true;
+          }
+
+          // test vendor properties
+          property = property.charAt(0).toUpperCase() + property.substr(1);
+
+          for (i; i < prefixes.length; i++) {
+            if (typeof style[prefixes[i] + property] === "string") {
+              return true;
+            }
+          }
+
+          return false;
 
         },
 
@@ -661,8 +720,7 @@
                 $indicator.after($img);
                 $indicator.hide();
 
-                if (typeof Modernizr !== "undefined" &&
-                    Modernizr.csstransitions) {
+                if (self.hasCSSTransitions) {
                   $img.addClass("loaded");
                 } else {
                   $img.fadeIn(transitions["fadeIn" + self._capitalize(module) + "ItemLoaded"]);
@@ -720,8 +778,7 @@
                     $indicator.after($img.attr("src", src));
                     $indicator.hide();
 
-                    if (typeof Modernizr !== "undefined" &&
-                        Modernizr.csstransitions) {
+                    if (self.hasCSSTransitions) {
                       $img.addClass("loaded");
                     } else {
                       $img.fadeIn(transitions.fadeInIndexItemLoaded);
@@ -785,8 +842,7 @@
                     $indicator.after($img.attr("src", src));
                     $indicator.hide();
 
-                    if (typeof Modernizr !== "undefined" &&
-                        Modernizr.csstransitions) {
+                    if (self.hasCSSTransitions) {
                       $img.addClass("loaded");
                     } else {
                       $img.fadeIn(transitions.fadeInLightboxItemLoaded);
@@ -1528,8 +1584,7 @@
 
               this._resizeLightboxCaptions(imgWidth);
 
-              if (typeof Modernizr !== "undefined" &&
-                  Modernizr.csstransitions) {
+              if (this.hasCSSTransitions) {
 
                 this.$lightboxDecksContainer.css({
                   width:         imgWidth,
@@ -2059,8 +2114,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               self._bindTouch(unbind);
@@ -2069,8 +2123,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             this._bindTouch(unbind);
 
@@ -2361,8 +2414,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -2371,8 +2423,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 
@@ -2470,8 +2521,7 @@
 
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -2480,8 +2530,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 
@@ -2602,8 +2651,7 @@
               };
 
           if (typeof window.define === "function" && window.define.amd &&
-              typeof Modernizr !== "undefined" &&
-              Modernizr.touch) {
+              this.hasTouch) {
 
             require(["hammer"], function() {
               func();
@@ -2612,8 +2660,7 @@
             });
 
           } else if ($.fn.hammer &&
-                     typeof Modernizr !== "undefined" &&
-                     Modernizr.touch) {
+                     this.hasTouch) {
 
             func();
 
