@@ -230,7 +230,10 @@
             lightboxItemIndicator:          "sl-lightbox-item-indicator",
             lightboxItemCaptionContainer:   "sl-lightbox-caption-container",
             lightboxIndexLink:              "sl-lightbox-index-link",
-            lightboxCursor:                 "sl-lightbox-cursor"
+            lightboxCursor:                 "sl-lightbox-cursor",
+
+            cssTouch:                       "sl-touch",
+            cssTransitions:                 "sl-transitions"
           },
 
 

@@ -96,6 +96,7 @@
                   marginLeft:   -imgWidth/2,
                   marginTop:    -imgHeight/2
                 });
+
                 this.$lightboxCaptionContainer.show();
 
                 // inline or general resize callback

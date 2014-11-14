@@ -374,7 +374,10 @@
             lightboxItemIndicator:          "sl-lightbox-item-indicator",
             lightboxItemCaptionContainer:   "sl-lightbox-caption-container",
             lightboxIndexLink:              "sl-lightbox-index-link",
-            lightboxCursor:                 "sl-lightbox-cursor"
+            lightboxCursor:                 "sl-lightbox-cursor",
+
+            cssTouch:                       "sl-touch",
+            cssTransitions:                 "sl-transitions"
           },
 
 
@@ -459,14 +462,32 @@
               this.hasTouch = false;
             }
 
+            // add touch class to container
+            if (this.hasTouch) {
+
+              this.$container.addClass(this.options.classNames.cssTouch);
+
+            }
+
             // CSS3 transition feature detection
             this.hasCSSTransitions = this._supportsCSSTransitions();
+
+            // add transition class to container
+            if (this.hasCSSTransitions) {
+
+              this.$container.addClass(this.options.classNames.cssTransitions);
+
+            }
 
           }
 
         },
 
 
+        // Supports Touch Method
+        // ---------------------
+        // **Private method** to detect, whether touch events are
+        // supported by the current browser.
         _supportsTouch: function() {
 
           if (window.DocumentTouch && document instanceof DocumentTouch ||
@@ -483,6 +504,10 @@
         },
 
 
+        // Supports CSS Transitions Method
+        // --------------------------------
+        // **Private method** to detect, whether CSS3 transitions are
+        // supported by the current browser.
         _supportsCSSTransitions: function() {
 
           var body     = document.body || document.documentElement,
@@ -1592,6 +1617,7 @@
                   marginLeft:   -imgWidth/2,
                   marginTop:    -imgHeight/2
                 });
+
                 this.$lightboxCaptionContainer.show();
 
                 // inline or general resize callback
