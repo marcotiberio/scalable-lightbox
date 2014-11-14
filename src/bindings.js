@@ -292,17 +292,7 @@
               };
 
 
-          if (typeof window.define === "function" && window.define.amd &&
-              this.hasTouch) {
-
-            require(["hammer"], function() {
-              self._bindTouch(unbind);
-            }, function() {
-              funcAlt();
-            });
-
-          } else if ($.fn.hammer &&
-                     this.hasTouch) {
+          if (false/*this.hasTouch*/) {
 
             this._bindTouch(unbind);
 
@@ -534,81 +524,30 @@
         _bindIndexLink: function(unbind) {
 
           var self       = this,
-              classNames = this.options.classNames,
-              func       = function() {
-
-                if (unbind) {
-
-                  self.$lightboxWrapper
-                    .hammer()
-                    .off("tap.scalableLightbox.indexItem");
-
-                } else {
-
-                  self.$lightboxWrapper
-                    .hammer()
-                    .on(
-                      "tap.scalableLightbox.indexItem",
-                      "a." + classNames.lightboxIndexLink,
-                      function(event) {
-                        event.stopPropagation();
-
-                        self.open({
-                          module:   "index",
-                          deck:     self.currentDeck.id
-                        });
-                      }
-                    );
-
-                }
-
-              },
-              funcAlt    = function() {
-
-                if (unbind) {
-
-                  self.$lightboxWrapper
-                    .off("click.scalableLightbox.indexItem");
-
-                } else {
-
-                  self.$lightboxWrapper
-                    .on(
-                      "click.scalableLightbox.indexItem",
-                      "a." + classNames.lightboxIndexLink,
-                      function(event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        self.open({
-                          module:   "index",
-                          deck:     self.currentDeck.id
-                        });
-                      }
-                    );
-
-                }
-
-              };
+              classNames = this.options.classNames;
 
 
-          if (typeof window.define === "function" && window.define.amd &&
-              this.hasTouch) {
+          if (unbind) {
 
-            require(["hammer"], function() {
-              func();
-            }, function() {
-              funcAlt();
-            });
-
-          } else if ($.fn.hammer &&
-                     this.hasTouch) {
-
-            func();
+            this.$lightboxWrapper
+              .off("click.scalableLightbox.indexItem");
 
           } else {
 
-            funcAlt();
+            this.$lightboxWrapper
+              .on(
+                "click.scalableLightbox.indexItem",
+                "a." + classNames.lightboxIndexLink,
+                function(event) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  self.open({
+                    module:   "index",
+                    deck:     self.currentDeck.id
+                  });
+                }
+              );
 
           }
 
@@ -622,100 +561,39 @@
         _bindThumbLinks: function(unbind) {
 
           var self       = this,
-              classNames = this.options.classNames,
-              func       = function() {
-
-                if (unbind) {
-
-                  self.$indexWrapper
-                    .hammer()
-                    .off("tap.scalableLightbox.thumbLinks");
-
-                } else {
-
-                  self.$indexWrapper
-                    .hammer()
-                    .on(
-                      "tap.scalableLightbox.thumbLinks",
-                      "." + classNames.indexItem,
-                      function(event) {
-                        event.gesture.stopPropagation();
-
-                        if (self.options.lightbox.enabled) {
-
-                            self.open({
-                              module:   "lightbox",
-                              deck:     self.currentDeck.id,
-                              index:    $(this).index()
-                            });
-
-                        } else {
-
-                          self._debug("error", "The lightbox module cannot be opened, because it "+
-                            "is not enabled!");
-
-                        }
-                      }
-                    );
-
-                }
-
-              },
-
-              funcAlt    = function() {
-
-                if (unbind) {
-
-                  self.$indexWrapper.off("click.scalableLightbox.thumbLinks");
-
-                } else {
-
-                  self.$indexWrapper
-                    .on(
-                      "click.scalableLightbox.thumbLinks",
-                      "." + classNames.indexItem,
-                      function(event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        if (self.options.lightbox.enabled) {
-
-                          self.open({
-                            module:   "lightbox",
-                            deck:     self.currentDeck.id,
-                            index:    $(this).index()
-                          });
-
-                        } else {
-
-                          self._debug("error", "The lightbox module cannot be opened, because it "+
-                            "is not enabled!");
-
-                        }
-                      }
-                    );
-
-                }
-              };
+              classNames = this.options.classNames;
 
 
-          if (typeof window.define === "function" && window.define.amd &&
-              this.hasTouch) {
+          if (unbind) {
 
-            require(["hammer"], function() {
-              func();
-            }, function() {
-              funcAlt();
-            });
-
-          } else if ($.fn.hammer &&
-                     this.hasTouch) {
-
-            func();
+            this.$indexWrapper.off("click.scalableLightbox.thumbLinks");
 
           } else {
 
-            funcAlt();
+            this.$indexWrapper
+              .on(
+                "click.scalableLightbox.thumbLinks",
+                "." + classNames.indexItem,
+                function(event) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  if (self.options.lightbox.enabled) {
+
+                    self.open({
+                      module:   "lightbox",
+                      deck:     self.currentDeck.id,
+                      index:    $(this).index()
+                    });
+
+                  } else {
+
+                    self._debug("error", "The lightbox module cannot be opened, because it "+
+                      "is not enabled!");
+
+                  }
+                }
+              );
 
           }
 
@@ -728,125 +606,54 @@
         // and should not bubble up to the parent element (closing the *index* or *lightbox module*).
         _bindCaptionLinks: function(unbind) {
 
-          var self       = this,
-              classNames = this.options.classNames,
-              func       = function() {
+          var classNames = this.options.classNames;
 
-                if (unbind) {
 
-                  if (self.options.index.enabled) {
+          if (unbind) {
 
-                    self.$indexDecksContainer
-                      .hammer()
-                      .off("tap.scalableLightbox.indexCaptionLinks");
+            if (this.options.index.enabled) {
 
-                  }
+              this.$indexDecksContainer
+                .off("click.scalableLightbox.indexCaptionLinks");
 
-                  if (self.options.lightbox.enabled) {
+            }
 
-                    self.$lightboxCaptionContainer
-                      .hammer()
-                      .off("tap.scalableLightbox.lightboxCaptionLinks");
+            if (this.options.lightbox.enabled) {
 
-                  }
+              this.$lightboxCaptionContainer
+                .off("click.scalableLightbox.lightboxCaptionLinks");
 
-                } else {
-
-                  if (self.options.index.enabled) {
-
-                    self.$indexDecksContainer
-                      .hammer()
-                      .on(
-                        "tap.scalableLightbox.indexCaptionLinks",
-                        "." + classNames.indexItemCaption + " a",
-                        function(event) {
-                          event.gesture.stopPropagation();
-                        }
-                      );
-
-                  }
-
-                  if (self.options.lightbox.enabled) {
-
-                    self.$lightboxCaptionContainer
-                      .hammer()
-                      .on(
-                        "tap.scalableLightbox.lightboxCaptionLinks",
-                        "a:not(." + classNames.lightboxIndexLink + ")",
-                        function(event) {
-                          event.gesture.stopPropagation();
-                        }
-                      );
-
-                  }
-
-                }
-
-              },
-              funcAlt    = function() {
-
-                if (unbind) {
-
-                  if (self.options.index.enabled) {
-                    self.$indexDecksContainer
-                      .off("click.scalableLightbox.indexCaptionLinks");
-                  }
-
-                  if (self.options.lightbox.enabled) {
-                    self.$lightboxCaptionContainer
-                      .off("click.scalableLightbox.lightboxCaptionLinks");
-                  }
-
-                } else {
-
-                  if (self.options.index.enabled) {
-
-                    self.$indexDecksContainer
-                      .on(
-                        "click.scalableLightbox.indexCaptionLinks",
-                        "." + classNames.indexItemCaption + " a",
-                        function(event) {
-                          event.stopPropagation();
-                        }
-                      );
-
-                  }
-
-                  if (self.options.lightbox.enabled) {
-
-                    self.$lightboxCaptionContainer
-                      .on(
-                        "click.scalableLightbox.lightboxCaptionLinks",
-                        "a:not(." + classNames.lightboxIndexLink + ")",
-                        function(event) {
-                          event.stopPropagation();
-                        }
-                      );
-
-                  }
-
-                }
-
-              };
-
-          if (typeof window.define === "function" && window.define.amd &&
-              this.hasTouch) {
-
-            require(["hammer"], function() {
-              func();
-            }, function() {
-              funcAlt();
-            });
-
-          } else if ($.fn.hammer &&
-                     this.hasTouch) {
-
-            func();
+            }
 
           } else {
 
-            funcAlt();
+            if (this.options.index.enabled) {
+
+              this.$indexDecksContainer
+                .on(
+                  "click.scalableLightbox.indexCaptionLinks",
+                  "." + classNames.indexItemCaption + " a",
+                  function(event) {
+                    event.stopPropagation();
+                  }
+                );
+
+            }
+
+            if (this.options.lightbox.enabled) {
+
+              this.$lightboxCaptionContainer
+                .on(
+                  "click.scalableLightbox.lightboxCaptionLinks",
+                  "a:not(." + classNames.lightboxIndexLink + ")",
+                  function(event) {
+                    event.stopPropagation();
+                  }
+                );
+
+            }
 
           }
+
         },
 
