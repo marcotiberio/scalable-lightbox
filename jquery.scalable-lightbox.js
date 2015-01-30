@@ -1,6 +1,6 @@
-//     ScalableLightbox - v1.0.0 - 2014-10-05
+//     ScalableLightbox - v1.0.1 - 2015-01-30
 
-//     (c) 2014 Olivier Hug, Bänziger Hug Ltd. <oh@baenziger-hug.com>
+//     (c) 2015 Olivier Hug, Bänziger Hug Ltd. <oh@baenziger-hug.com>
 //     Licensed under the GPL v3, Commercial license
 //     https://scalable-lightbox.com/
 
@@ -915,7 +915,7 @@
                   if (cb) {
                     cb();
                   } else if (typeof self.options.callbacks.open === "function") {
-                    self.options.callbacks.open();
+                    self.options.callbacks.open(options.module, self.currentDeck.id);
                   }
 
                 }
@@ -1050,7 +1050,7 @@
             if (cb) {
               cb();
             } else if (typeof self.options.callbacks.close === "function") {
-              self.options.callbacks.close();
+              self.options.callbacks.close(module, self.currentDeck.id);
             }
 
           };

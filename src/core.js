@@ -506,7 +506,7 @@
                   if (cb) {
                     cb();
                   } else if (typeof self.options.callbacks.open === "function") {
-                    self.options.callbacks.open();
+                    self.options.callbacks.open(options.module, self.currentDeck.id);
                   }
 
                 }
@@ -641,7 +641,7 @@
             if (cb) {
               cb();
             } else if (typeof self.options.callbacks.close === "function") {
-              self.options.callbacks.close();
+              self.options.callbacks.close(module, self.currentDeck.id);
             }
 
           };
